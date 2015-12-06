@@ -23,7 +23,7 @@ class OptionsMapping(defaultdict):
 
     def __missing__(self, key):
         try:
-            value = raw_input(prompt_str.format(key))
+            value = input(prompt_str.format(key))
         except KeyboardInterrupt:
             # Catch the sigint here, since the user's pretty likely to
             # Ctrl-C and go fix the options mapping input file

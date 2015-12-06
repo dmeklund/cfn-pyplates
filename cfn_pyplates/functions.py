@@ -51,7 +51,7 @@ Notes:
 # wrappers to make testing the function failure cases very easy
 
 
-from exceptions import IntrinsicFuncInputError
+from .exceptions import IntrinsicFuncInputError
 
 __all__ = [
     'base64',
@@ -209,7 +209,7 @@ def select(index, *args):
         raise IntrinsicFuncInputError(select._errmsg_int)
     if not args:
         raise IntrinsicFuncInputError(select._errmsg_empty)
-    if filter(lambda x: x is None, args):
+    if [x for x in args if x is None]:
         raise IntrinsicFuncInputError(select._errmsg_null)
     try:
         args[index]

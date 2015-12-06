@@ -102,7 +102,7 @@ WARNING!
         return 1
 
     if not args['<outfile>'] or args['<outfile>'] == '-':
-        print output
+        print(output)
     else:
         args['<outfile>'].write(output)
 

@@ -108,7 +108,7 @@ class CloudFormationTemplateTestCase(unittest.TestCase):
         # We expect to see the AWSTemplateFormatVersion, the provided
         # description, and the provided parameters. We do not expect to
         # see empty Mappings, Resources, or Outputs.
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "AWSTemplateFormatVersion": "2010-09-09",
           "Description": "This is a test",
@@ -116,7 +116,7 @@ class CloudFormationTemplateTestCase(unittest.TestCase):
             "These": "are awesome!"
           }
         }''')
-        self.assertEqual(unicode(cft), expected_out)
+        self.assertEqual(str(cft), expected_out)
 
 
 class ResourcesTestCase(unittest.TestCase):
@@ -130,11 +130,11 @@ class ResourcesTestCase(unittest.TestCase):
         self.assertIn('TestResource', cft.resources)
 
         # And it should look like this...
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test"
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_properties(self):
         properties_dict = {'Key1': 'Value1', 'Key2': 'Value2'}
@@ -144,7 +144,7 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the properties attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "Properties": {
@@ -152,7 +152,7 @@ class ResourcesTestCase(unittest.TestCase):
             "Key1": "Value1"
           }
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_metadata(self):
         metadata = core.Metadata({"Object1": "Location1", "Object2": "Location2"})
@@ -161,7 +161,7 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "Metadata": {
@@ -169,7 +169,7 @@ class ResourcesTestCase(unittest.TestCase):
             "Object2": "Location2"
           }
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_deletion_policy(self):
         deletion_policy = core.DeletionPolicy("Retain")
@@ -178,12 +178,12 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "DeletionPolicy": "Retain"
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_depends_on(self):
         depends_on = core.DependsOn("Location2")
@@ -192,12 +192,12 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "DependsOn": "Location2"
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_update_policy(self):
         update_policy = core.UpdatePolicy(
@@ -207,7 +207,7 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "UpdatePolicy": {
@@ -216,7 +216,7 @@ class ResourcesTestCase(unittest.TestCase):
             "MinInstancesInService": "Location2"
           }
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_extended_attributes(self):
         update_policy = core.UpdatePolicy({"Object1": "Location1", "Object2": "Location2"})
@@ -229,7 +229,7 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "Metadata": {
@@ -243,7 +243,7 @@ class ResourcesTestCase(unittest.TestCase):
           "DeletionPolicy": "Retain",
           "DependsOn": "Location2"
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
     def test_resource_with_condition(self):
         condition = core.Condition('TestCondition', {'Fn::Fake': 'ConditionValue'})
@@ -252,12 +252,12 @@ class ResourcesTestCase(unittest.TestCase):
         cft.resources.test = res
 
         # The output should have the metadata attached
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Type": "AWS::Resource::Test",
           "Condition": "TestCondition"
         }''')
-        self.assertEqual(unicode(cft.resources.test), expected_out)
+        self.assertEqual(str(cft.resources.test), expected_out)
 
 
 class ConditionsTestCase(unittest.TestCase):
@@ -269,22 +269,22 @@ class ConditionsTestCase(unittest.TestCase):
         self.assertIn('TestCondition', cft.conditions)
 
         # And it should look like this...
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Fn::Fake": "ConditionValue"
         }''')
-        self.assertEqual(unicode(cft.conditions.test), expected_out)
+        self.assertEqual(str(cft.conditions.test), expected_out)
 
     def test_condition_ref(self):
         cft = core.CloudFormationTemplate()
         cft.conditions.test = core.Condition('TestCondition', {'Ref': 'ReferencedThing'})
 
         # And it should look like this...
-        expected_out = dedent(u'''\
+        expected_out = dedent('''\
         {
           "Ref": "ReferencedThing"
         }''')
-        self.assertEqual(unicode(cft.conditions.test), expected_out)
+        self.assertEqual(str(cft.conditions.test), expected_out)
 
 
 class MiscElementsTestCase(unittest.TestCase):
@@ -376,7 +376,7 @@ class MiscElementsTestCase(unittest.TestCase):
 class GenerateTestCase(unittest.TestCase):
     def test_callable_generate(self):
         # Make a pyplate that uses the options mapping
-        pyplate_contents = dedent(u'''\
+        pyplate_contents = dedent('''\
         cft = CloudFormationTemplate('This is a test')
         cft.parameters.update({
             'Exists': options['ThisKeyExists']

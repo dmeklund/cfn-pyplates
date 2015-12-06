@@ -10,7 +10,7 @@
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 
-from cStringIO import StringIO
+from io import StringIO
 from textwrap import dedent
 from tempfile import NamedTemporaryFile
 import json
@@ -65,7 +65,7 @@ class CLITestCase(unittest.TestCase):
 
     def test_generate(self):
         # Make a pyplate that uses the options mapping
-        pyplate = self._make_pyplate(u'''\
+        pyplate = self._make_pyplate('''\
         cft = CloudFormationTemplate('This is a test')
         cft.parameters.update({
             'Exists': options['ThisKeyExists'],
@@ -75,7 +75,7 @@ class CLITestCase(unittest.TestCase):
         # Now make an options mapping with only one of those keys in it
         # to simultaneously test options interpolation and
         # user-prompted input
-        options_mapping_contents = dedent(u'''\
+        options_mapping_contents = dedent('''\
         {
             'ThisKeyExists': true
         }
@@ -128,14 +128,14 @@ class CLITestCase(unittest.TestCase):
 
     def test_generate_stdin_options(self):
         # Make a pyplate that uses the options mapping
-        pyplate = self._make_pyplate(u'''\
+        pyplate = self._make_pyplate('''\
         cft = CloudFormationTemplate('This is a test')
         cft.parameters.update({
             'Exists': options['ThisKeyExists'],
         })''')
 
         # Prime stdin with the contents of the options file
-        sys.stdin.write('{0}\n'.format(dedent(u'''\
+        sys.stdin.write('{0}\n'.format(dedent('''\
         {
             'ThisKeyExists': true
         }
@@ -154,7 +154,7 @@ class CLITestCase(unittest.TestCase):
         self.assertTrue(template['Parameters']['Exists'])
 
     def test_broken_pyplate(self):
-        pyplate = self._make_pyplate(u'''\
+        pyplate = self._make_pyplate('''\
         I am a broken pyplate.
         })''')
         sys.argv = ['cfn_py_generate', pyplate.name]

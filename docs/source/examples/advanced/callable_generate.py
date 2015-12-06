@@ -9,4 +9,4 @@ generate_pyplate('/path/to/project.py')
 # In addition, if you already have a reference to a
 # CloudFormationTemplate, generating its JSON template is as easy as
 # casting it as a string (or unicode) object:
-print str(my_cloud_formation_template_instance)
+print(str(my_cloud_formation_template_instance))
